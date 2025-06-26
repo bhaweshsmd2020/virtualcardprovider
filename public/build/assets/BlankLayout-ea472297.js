@@ -1,0 +1,1 @@
+import{_ as e}from"./ToastrContainer-869d906f.js";import{o,c as r,a as t,C as s,F as n}from"./app-55c25e51.js";const p={__name:"BlankLayout",setup(_){return(a,c)=>(o(),r(n,null,[t(e),s(a.$slots,"default")],64))}};export{p as _};
