@@ -11,4 +11,4 @@
 
 {{ __('Thanks') }},<br>
 {{ config('app.name') }}
-@endcomponent
+@endcomponent 
