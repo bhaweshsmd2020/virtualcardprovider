@@ -64,7 +64,31 @@ const primaryData = page.props?.primaryData ?? {}
           <NavMenu layout-name="Web" />
         </div>
       </div>
+
+      <div class="text-center mobile-whatsapp">
+        <a href="https://wa.me/17867374617" target="_blank">
+          <img src="/assets/images/whatsapp.png" alt="" class="lazy-img icon " style="width:150px;" />
+        </a>
+      </div>
       <!--/.top-header-->
     </div>
   </header>
 </template>
+
+<style>
+@media (max-width: 768px) {
+  .md-pt-130 {
+    padding-top: 190px !important;
+  }
+
+  .md-pt-150 {
+    padding-top: 240px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-whatsapp{
+    display: none;
+  }
+}
+</style>

@@ -10,7 +10,7 @@ const props = defineProps({
 })
 </script>
 <template>
-  <div class="text-feature-one mt-80">
+  <div class="text-feature-one mt-40">
     <div class="container textfeatureone">
       <div class="line-wrapper position-relative">
         <div class="row align-items-center">

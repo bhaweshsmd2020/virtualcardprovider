@@ -5,105 +5,106 @@ namespace App\Actions;
 use App\Models\Option;
 use App\Traits\Uploader;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 
 class OptionUpdate
 {
-  use Uploader;
+    use Uploader;
 
-  private array $optionData;
-  private array $oldData = [];
+    private array $optionData;
+    private array $oldData = [];
 
-  public function __construct()
-  {
-    // Get all data from request
-    $this->optionData = [...request()->all()];
-  }
-
-  public function update($option_key)
-  {
-    // Get option from database or create new one
-    $option = Option::query()->firstOrNew(
-      [
-        'key' => $option_key,
-        'lang' => app()->getLocale()
-      ],
-      [
-        'value' => []
-      ]
-    );
-
-    if ($option->exists) {
-      $this->oldData = $option->value ?? [];
+    public function __construct()
+    {
+        $data = request()->all();
+        $this->optionData = is_array($data) ? $data : [];
     }
 
-    // Upload files
-    $this->uploadFiles();
-    // Set value to option
-    $option->value = $this->optionData;
-    // Save option
-    $option->save();
-  }
+    public function update(string $option_key)
+    {
+        $option = Option::query()->firstOrNew(
+            [
+                'key' => $option_key,
+                'lang' => app()->getLocale(),
+            ],
+            [
+                'value' => [],
+            ]
+        );
 
-  private function uploadFilesRecursive($data, $prefix = '')
-  {
-    $uploadedData = [];
+        $this->oldData = is_array($option->value)
+            ? $option->value
+            : json_decode($option->value ?? '{}', true);
 
-    foreach ($data as $key => $value) {
-      $fileKey = $prefix . $key;
+        $this->uploadFiles();
 
-      if (is_array($value)) {
-        // Check if the array is associative or indexed
-        $isAssociative = Arr::isAssoc($value);
-
-        if ($isAssociative) {
-          // Recursively upload files in the nested associative array
-          $uploadedData[$key] = $this->uploadFilesRecursive($value, $fileKey . '.');
-        } else {
-          // Recursively upload files in the nested indexed array
-          $uploadedData[$key] = [];
-          foreach ($value as $index => $item) {
-            $uploadedData[$key][$index] = $this->uploadFilesRecursive($item, $fileKey . '.' . $index . '.');
-          }
-        }
-      } elseif ($value instanceof \Illuminate\Http\UploadedFile) {
-        // Delete old file if it exists
-        $oldFilePath = $this->getOldFilePath($fileKey);
-        if ($oldFilePath !== null && is_file($oldFilePath)) {
-          unlink($oldFilePath);
+        // 👇 Process badges from badges_string before saving
+        if (isset($this->optionData['business_payments']['cards']) && is_array($this->optionData['business_payments']['cards'])) {
+            foreach ($this->optionData['business_payments']['cards'] as &$card) {
+                if (isset($card['badges_string'])) {
+                    $card['badges'] = array_filter(array_map('trim', explode(',', $card['badges_string'])));
+                } else {
+                    $card['badges'] = [];
+                }
+            }
         }
 
-        // Upload the file and set the value to the uploaded path
-        $uploadedData[$key] = (string) $this->uploadFile($fileKey, '');
-      } else {
-        // Keep non-file values as they are
-        $uploadedData[$key] = $value;
-      }
+        $option->value = $this->optionData;
+        $option->save();
     }
 
-    return $uploadedData;
-  }
+    private function uploadFilesRecursive($data, $prefix = '')
+    {
+        if (!is_array($data)) {
+            return [];
+        }
 
-  private function getOldFilePath($fileKey)
-  {
-    $filePath = data_get($this->oldData, $fileKey);
+        $uploadedData = [];
 
-    if ($filePath !== null && file_exists(public_path($filePath))) {
-      return public_path($filePath);
+        foreach ($data as $key => $value) {
+            $fileKey = $prefix . $key;
+
+            if (is_array($value)) {
+                $isAssoc = Arr::isAssoc($value);
+
+                if ($isAssoc) {
+                    $uploadedData[$key] = $this->uploadFilesRecursive($value, $fileKey . '.');
+                } else {
+                    $uploadedData[$key] = [];
+                    foreach ($value as $index => $item) {
+                        $uploadedData[$key][$index] = $this->uploadFilesRecursive($item, $fileKey . '.' . $index . '.');
+                    }
+                }
+            } elseif ($value instanceof \Illuminate\Http\UploadedFile) {
+                $oldFilePath = $this->getOldFilePath($fileKey);
+
+                if ($oldFilePath !== null && is_file($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+
+                $uploadedData[$key] = (string) $this->uploadFile($fileKey);
+            } else {
+                $uploadedData[$key] = $value;
+            }
+        }
+
+        return $uploadedData;
     }
-    return null;
-  }
 
-  public function uploadFiles()
-  {
-    // Your request data
-    $requestData = request()->all();
+    private function getOldFilePath($fileKey)
+    {
+        $filePath = data_get($this->oldData, $fileKey);
 
-    // Call the recursive function for the entire request data
-    $modifiedOptionData = $this->uploadFilesRecursive($requestData);
-    $this->optionData = $modifiedOptionData;
+        if ($filePath !== null && file_exists(public_path($filePath))) {
+            return public_path($filePath);
+        }
 
-    // Now $this->optionData contains the processed data
-    // You can do further processing or return the result as needed
-  }
+        return null;
+    }
+
+    public function uploadFiles()
+    {
+        $requestData = request()->all();
+        $modifiedOptionData = $this->uploadFilesRecursive(is_array($requestData) ? $requestData : []);
+        $this->optionData = $modifiedOptionData;
+    }
 }

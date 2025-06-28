@@ -158,6 +158,7 @@ class BlogController extends Controller
     {
         $validated = request()->validate([
             'blog.title' => ['required', 'string', 'max:150'],
+            'blog.slug' => ['required', 'string', 'max:500'],
             'blog.preview' => ['nullable', 'image', 'max:1024'],
             'blog.banner' => ['nullable', 'image', 'max:1024'],
             'blog.meta_image' => ['nullable', 'image', 'max:1024'],

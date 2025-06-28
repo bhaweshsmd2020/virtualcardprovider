@@ -45,8 +45,8 @@ defineProps({
 </style>
 
 <template>
-  <div class="fancy-banner-four position-relative  lg-pt-50 wow fadeInUp  py-5">
-    <div class="container mt-80 fancybannerfour">      
+  <div class="fancy-banner-four position-relative  lg-pt-50 wow fadeInUp py-5">
+    <div class="container mt-20 fancybannerfour">      
       <div class="row align-items-center">
         <div class="col-lg-5">
           <img src="/assets/images/img5.png" alt="image" class="lazy-img w-100" style="border-radius: 20px;"/>

@@ -30,7 +30,7 @@ const onSwiperUpdate = (swiper) => {
 </script>
 
 <template>
-  <div class="block-feature-six feedback-section-three position-relative pt-30 pb-20 md pb-80">
+  <div class="block-feature-six feedback-section-three position-relative pt-30">
     <div class="container">
       <div class="position-relative">
         <div class="partner-logo-one pt-20 md-pt-80">
