@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Category;
 use App\Helpers\SeoMeta;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class WebPageController extends Controller
 {
@@ -15,7 +16,7 @@ class WebPageController extends Controller
     public function home()
     {
         if (!file_exists(base_path('public/uploads/installed'))) {
-          return redirect('/install');
+            return redirect('/install');
         }
         SeoMeta::init('seo_home');
 
@@ -49,8 +50,54 @@ class WebPageController extends Controller
             ->limit(2)
             ->get();
 
+        $home_page = get_option('home_page', true);
+
+        // Log raw home_page data
+        Log::info('Raw home_page data', ['home_page' => $home_page]);
+
+        // Ensure home_page is an array
+        if (is_null($home_page)) {
+            Log::warning('home_page is null, setting default');
+            $home_page = [];
+        } elseif (is_string($home_page)) {
+            Log::warning('home_page is a string, attempting to decode JSON', ['home_page' => $home_page]);
+            $home_page = json_decode($home_page, true) ?? [];
+        }
+        if (!is_array($home_page)) {
+            Log::error('home_page is not an array, setting default', ['home_page' => $home_page]);
+            $home_page = [];
+        }
+
+        // Initialize business_payments if not exists
+        if (!isset($home_page['business_payments'])) {
+            Log::info('business_payments missing, initializing default');
+            $home_page['business_payments'] = [
+                'title' => 'Stay on top of every business payment',
+                'subtitle' => '',
+                'cards' => []
+            ];
+        }
+
+        // Ensure cards is an array
+        if (!isset($home_page['business_payments']['cards']) || !is_array($home_page['business_payments']['cards'])) {
+            Log::info('business_payments.cards missing or not an array, initializing default');
+            $home_page['business_payments']['cards'] = [];
+        }
+
+        // Sanitize business_payments.cards
+        foreach ($home_page['business_payments']['cards'] as &$card) {
+            $card['image'] = isset($card['image']) && is_string($card['image']) && $card['image'] ? $card['image'] : '/assets/images/default-image.png';
+            $card['title'] = $card['title'] ?? '';
+            $card['description'] = $card['description'] ?? '';
+            $card['badges'] = isset($card['badges']) && is_array($card['badges']) ? $card['badges'] : [];
+            $card['badges_string'] = isset($card['badges_string']) && is_string($card['badges_string']) ? $card['badges_string'] : (!empty($card['badges']) ? implode(', ', $card['badges']) : '');
+        }
+
+        // Log sanitized home_page data
+        Log::info('Sanitized home_page data', ['home_page' => $home_page]);
+
         return Inertia::render('Web/Home/Index', [
-            'home' => get_option('home_page', true),
+            'home' => $home_page ?: [],
             'testimonials' => $testimonials,
             'faqs' => $faqs,
             'blogs' => $blogs,

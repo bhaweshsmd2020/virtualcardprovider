@@ -87,7 +87,8 @@ class Blog
     {
         $post = Post::where('type', 'blog')->with('preview', 'seo')->findOrFail($id);
         $post->title = $request['title'];
-        $post->slug = Str::slug($request['title']);
+        // $post->slug = Str::slug($request['title']);
+        $post->slug = $request['slug'];
         $post->type = 'blog';
         $post->featured = request()->blog['featured'] ? 1 : 0;
         $post->status = request()->blog['status'] ? 1 : 0;

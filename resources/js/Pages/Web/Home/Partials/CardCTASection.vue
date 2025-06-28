@@ -37,7 +37,7 @@ defineProps({
 
 <template>
   <div class="block-feature-seven position-relative lg-mt-80">
-    <div class="container mt-80">
+    <div class="container mt-30">
       <div class="position-relative">
         <div class="row">
           <div class="col-xl-7 wow fadeInLeft">

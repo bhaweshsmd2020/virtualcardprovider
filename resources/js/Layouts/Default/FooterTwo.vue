@@ -7,12 +7,9 @@ const primaryData = page.props.primaryData
 const { footerRight, footerCenter, footerLeft, socials } = footerComposable()
 </script>
 <template>
-  <div class="footer-two" style="
-    margin-top: 50px;">
-    
+  <div class="footer-two">    
         <div class="container">
-          <div class="row justify-content-between" style="position: relative;
-    top: 150px;">
+          <div class="row justify-content-between" style="position: relative; top: 150px;">
             <div class="col-xl-3 col-lg-4 footer-intro ">
               <div class="d-flex logo md-mb-20 mb-15 justify-content-center">
                 <Link href="/">
@@ -22,9 +19,30 @@ const { footerRight, footerCenter, footerLeft, socials } = footerComposable()
               <!-- logo -->
               <p v-html="primaryData.slogan" class="lh-sm md-mb-20"></p>
 
+              <div class="d-flex align-items-center" style="justify-content: center;">
+                <img
+                  src="/assets/images/us.png"
+                  data-src="/assets/images/us.png"
+                  alt=""
+                  style="width: 40px; border-radius: 50%; margin-right: 10px;"
+                />
+                <img
+                  src="/assets/images/gb.png"
+                  data-src="/assets/images/us.png"
+                  alt=""
+                  style="width: 40px; border-radius: 50%; margin-right: 10px;"
+                />
+                <img
+                  src="/assets/images/pt.png"
+                  data-src="/assets/images/us.png"
+                  alt=""
+                  style="width: 40px; border-radius: 50%; margin-right: 10px;"
+                />
+              </div>
+
               <ul
                 v-if="Object.keys(socials).length"
-                class="style-none d-flex align-items-center social-icon footer-social-items mb-20 mt-20"
+                class="style-none d-flex align-items-center social-icon footer-social-items mb-20 mt-20" style="justify-content: center;"
               >
                 <li>
                   <a target="_blank" :href="socials.facebook">
@@ -40,7 +58,7 @@ const { footerRight, footerCenter, footerLeft, socials } = footerComposable()
                 <li>
                   <a target="_blank" :href="socials.linkedin"><i class="bi bi-linkedin"></i></a>
                 </li>
-              </ul>
+              </ul>              
               <template v-if="Object.keys($page.props?.languages ?? {}).length > 1">
                 <LanguageSwitch classes="mt-5 mb-10" />
               </template>

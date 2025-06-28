@@ -28,8 +28,8 @@ const onSwiperUpdate = (swiper) => {
 </script>
 
 <template>
-  <div class="feedback-section-three position-relative pt-50 lg-pt-100">
-    <div class="container mt-80 feedback-section-three-testimonial">
+  <div class="feedback-section-three position-relative lg-pt-100">
+    <div class="container mt-60 feedback-section-three-testimonial">
       <div class="position-relative">
         <div class="row">
           <div class="col-lg-6">

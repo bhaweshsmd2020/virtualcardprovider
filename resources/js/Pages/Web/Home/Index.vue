@@ -10,17 +10,19 @@ import FeaturesSection from '@/Pages/Web/Home/Partials/FeaturesSection.vue'
 import HeroSection from '@/Pages/Web/Home/Partials/HeroSection.vue'
 import TestimonialSection from '@/Pages/Web/Home/Partials/TestimonialSection.vue'
 import VideoCtaSection from '@/Pages/Web/Home/Partials/VideoCtaSection.vue'
+import BusinessPayments from '@/Pages/Web/Home/Partials/BusinessPayments.vue'
 import BrandLogo from './Partials/BrandLogo.vue'
 
 defineOptions({ layout: DefaultLayout })
 defineProps(['home', 'testimonials', 'faqs', 'logos', 'blogs'])
+
 </script>
 
 <template>
   <HeaderTwo />
   <HeroSection :data="home.hero ?? {}" />
   <BrandLogo :data="home.testimonial ?? {}" :testimonials="testimonials" :logos="logos" />
-  <div class="block-feature-six feedback-section-three position-relative pt-30 pb-20 md pb-80">
+  <div class="block-feature-six feedback-section-three position-relative pt-30">
   <div class="container">
   <div class="row justify-content-center">
     <div class="wallet-buttons col-sm-4 align-items-center">
@@ -48,11 +50,12 @@ defineProps(['home', 'testimonials', 'faqs', 'logos', 'blogs'])
  
   <FeaturesSection :data="home.features ?? {}" />
   <AboutSection :data="home.reviewer ?? {}" />
-  <VideoCtaSection :data="home.video_cta ?? {}" />
+  <!-- <VideoCtaSection :data="home.video_cta ?? {}" /> -->
+  <BusinessPayments :data="home.business_payments ?? {}" />
   <CardCTASection :data="home.card_cta ?? {}" />
   <TestimonialSection :data="home.testimonial ?? {}" :testimonials="testimonials" :logos="logos" />
   <AppCTASection :data="home.app_cta" />
-  <div class="block-feature-six mt-80" >
+  <div class="block-feature-six mt-20" >
   <div class="container videosection">
   <div class="row align-items-center">
     <div class="col-12 col-md-6 mb-4 mb-md-0">

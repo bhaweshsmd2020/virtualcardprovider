@@ -12,6 +12,11 @@
                 <input type="text" name="title" required v-model="editForm.title" class="input" />
               </div>
 
+              <div class="mb-2">
+                <label class="label">{{ trans('Blog Slug') }}</label>
+                <input type="text" name="slug" required v-model="editForm.slug" class="input" />
+              </div>
+
               <div class="mb-2 mt-2">
                 <label class="label">{{ trans('Blog Image (Preview)') }}</label>
                 <input
@@ -181,6 +186,7 @@ const props = defineProps([
 
 const editForm = useForm({
   title: props.info.title,
+  slug: props.info.slug,
   short_description: props.info.short_description.value,
   main_description: props.info.long_description.value,
   categories: props.cats ?? [],

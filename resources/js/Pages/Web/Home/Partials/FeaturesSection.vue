@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="block-feature-six position-relative lg-pt-80 lg-pb-50 pb-50 pt-50">
+  <div class="block-feature-six position-relative lg-pt-80 lg-pb-50 pt-20">
     <div class="container">
       <div class="row gx-lg-5">
         <div class="col-lg-5 wow fadeInLeft mt-5">

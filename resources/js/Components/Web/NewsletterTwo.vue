@@ -5,7 +5,7 @@ const { email, NEWSLETTER_API, subscribe } = footerComposable()
 </script>
 <template>
   <div class="newsletter-banner" v-if="NEWSLETTER_API">
-    <div class="container mt-50">
+    <div class="container mt-10">
       <div class="main-wrapper">
         <div class="row">
           <div class="col-lg-6">
