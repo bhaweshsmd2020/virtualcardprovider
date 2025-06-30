@@ -1,0 +1,1 @@
+import{_ as s}from"./ToastrContainer-e495c250.js";import{_ as o}from"./SeoMeta-0da1ae18.js";/* empty css                                                   */import{o as t,c as r,a,b as _,C as c,F as m}from"./app-8b08b02b.js";const n={class:"fix"},h={__name:"AuthLayout",setup(i){return(e,l)=>(t(),r(m,null,[a(o),a(s),_("main",n,[c(e.$slots,"default")])],64))}};export{h as _};
