@@ -63,4 +63,3 @@ Route::post('transaction-details', [RampController::class, 'transactionDetails']
 
 Route::post('departments-list', [RampController::class, 'departmentsList']);
 Route::post('statements-list', [RampController::class, 'statementsList']);
-Route::post('statements-list-new', [RampController::class, 'statementsListNew']);

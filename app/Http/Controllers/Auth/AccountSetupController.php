@@ -45,16 +45,63 @@ class AccountSetupController extends Controller
         return Inertia::render('Auth/SetLocation', compact('countries', 'authPages', 'codes'));
     }
 
+    // public function store(StoreLocationSetupRequest $request)
+    // {
+    //     $user = auth()->user();
+    //     $user->update($request->validated());
+    //     //Toastr::success(__('Information has been saved successfully'));
+
+    //     // send otp if phone verification is disabled
+    //     if (config('feature.phone_verification') == false) {
+    //         return Inertia::location(route('user.dashboard'));
+    //     }
+
+    //     if($request->state_id == '1000'){
+    //         OtherState::create([
+    //             'user_id' => $user->id,
+    //             'state_id' => $request->state_id,
+    //             'name' => $request->other_state,
+    //         ]);
+    //     }
+
+    //     if($request->state_id == '1000'){
+    //         OtherCity::create([
+    //             'user_id' => $user->id,
+    //             'city_id' => $request->state_id,
+    //             'name' => $request->other_city,
+    //         ]);
+    //     }        
+
+    //     // otp verification is enabled now send otp
+    //     $otpCode = random_int(100000, 999999);
+    //     $message = __('Your Verification code for Virtual Card Provider : '.$otpCode);
+    //     $to = $user->country_code . $user->phone;
+
+    //     $twilioClient = new TwilioService();
+    //     $sendOtpRes = $twilioClient->sendMessage($to, $message);
+
+    //     $expiresAt = now()->addMinutes(2);
+
+    //     if ($sendOtpRes->successful()) {
+    //         session()->put('otp_info', [
+    //             'code' => $otpCode,
+    //             'country_code' =>  $request->country_code,
+    //             'phone' => $request->phone,
+    //             'expires_at' => $expiresAt,
+    //         ]);
+
+    //         return to_route('otp.verification.index', ['expires_at' => $expiresAt->toDateTimeString()])
+    //         ->with('flash', ['type' => 'success', 'message' => __('6 - digit OTP has been sent successfully on your registered phone number')]);
+    //     }
+
+    //     return to_route('phone.verification.index')->with('flash', ['type' => 'error', 'message' => __('Something went wrong, please try again.')]);
+    // }
+
     public function store(StoreLocationSetupRequest $request)
     {
         $user = auth()->user();
-        $user->update($request->validated());
-        //Toastr::success(__('Information has been saved successfully'));
 
-        // send otp if phone verification is disabled
-        if (config('feature.phone_verification') == false) {
-            return Inertia::location(route('user.dashboard'));
-        }
+        $user->update($request->validated());
 
         if($request->state_id == '1000'){
             OtherState::create([
@@ -62,38 +109,22 @@ class AccountSetupController extends Controller
                 'state_id' => $request->state_id,
                 'name' => $request->other_state,
             ]);
-        }
 
-        if($request->state_id == '1000'){
             OtherCity::create([
                 'user_id' => $user->id,
                 'city_id' => $request->state_id,
                 'name' => $request->other_city,
             ]);
-        }        
-
-        // otp verification is enabled now send otp
-        $otpCode = random_int(100000, 999999);
-        $message = __('Your Verification code for Virtual Card Provider : '.$otpCode);
-        $to = $user->country_code . $user->phone;
-
-        $twilioClient = new TwilioService();
-        $sendOtpRes = $twilioClient->sendMessage($to, $message);
-
-        $expiresAt = now()->addMinutes(2);
-
-        if ($sendOtpRes->successful()) {
-            session()->put('otp_info', [
-                'code' => $otpCode,
-                'country_code' =>  $request->country_code,
-                'phone' => $request->phone,
-                'expires_at' => $expiresAt,
-            ]);
-
-            return to_route('otp.verification.index', ['expires_at' => $expiresAt->toDateTimeString()])
-            ->with('flash', ['type' => 'success', 'message' => __('6 - digit OTP has been sent successfully on your registered phone number')]);
         }
 
-        return to_route('phone.verification.index')->with('flash', ['type' => 'error', 'message' => __('Something went wrong, please try again.')]);
+        if (config('feature.phone_verification') === false) {
+            return Inertia::location(route('user.dashboard'));
+        }
+
+        // At this point, you assume that the frontend has already done Firebase OTP verification.
+        // So you should check that verification token here (optional).
+        
+        return to_route('otp.verification.index')
+            ->with('flash', ['type' => 'success', 'message' => __('Please verify your phone number with the OTP sent by Firebase.')]);
     }
 }

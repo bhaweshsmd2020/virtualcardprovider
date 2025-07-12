@@ -46,7 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('verify/phone', [VerifyPhoneController::class, 'index'])->name('phone.verification.index');
     Route::post('verify/phone', [VerifyPhoneController::class, 'store'])->middleware(['throttle:2,1'])->name('phone.verification.store');
     Route::get('verify/otp', [VerifyOtpController::class, 'index'])->name('otp.verification.index');
-    Route::post('verify/otp', [VerifyOtpController::class, 'store'])->middleware('throttle:6,1')->name('otp.verification.store');
+    // Route::post('verify/otp', [VerifyOtpController::class, 'store'])->middleware('throttle:6,1')->name('otp.verification.store');
+    Route::post('/verify-firebase-otp', [VerifyOtpController::class, 'verifyFirebaseOtp']);
 
     // password update
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
